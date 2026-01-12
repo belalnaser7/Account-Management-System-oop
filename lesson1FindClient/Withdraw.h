@@ -1,0 +1,54 @@
+#pragma once
+#include <iostream>
+#include "ClsBankClient.h"
+#include "ClsScreen.h"
+#include "PrintAccount.h"
+#include "/Users/dell/Desktop/libraries/ClsInputValidate.h"
+using namespace std;
+class ClsWithdraw : protected ClsScreen
+{
+public:
+    static void WithdrawAmount()
+    {
+        ClsScreen::DisplayScreenTitle("Withdraw Amount Screen");
+        int count = 0;
+        int accNum = 0;
+        while (count < 3)
+        {
+            accNum = clsInputValidate::readnumber("Enter Account Number to Withdraw: ");
+            if (!ClsBankClient::IsFound(accNum))
+            {
+                cout << "Account not found. Please try again.\n";
+                count++;
+            }
+            else
+            {
+                ClsBankClient client = ClsBankClient::Find(accNum);
+                ClsPrintAccount::PrintAccountCard(client);
+                float amount = clsInputValidate::readnumber("Enter amount to withdraw: ");
+                if (amount > client.GetAccountBalance())
+                {
+                    cout << "Insufficient balance. Current balance: " << client.GetAccountBalance() << "\n";
+                }
+                else
+                {
+                    client.SetAccountBalance(client.GetAccountBalance() - amount);
+                    if (client.SaveToFile() == ClsBankClient::enSaveMode::SaveSucceeded)
+                    {
+                        cout << "Withdrawal successful. New balance: " << client.GetAccountBalance() << "\n";
+                        ClsPrintAccount::PrintAccountCard(client);
+                    }
+                    else
+                    {
+                        cout << "Error saving the updated account information.\n";
+                    };
+                }
+                break;
+            }
+        }
+        if (count >= 3)
+        {
+            cout << "You have exceeded the maximum number of attempts.\n";
+        }
+    }
+};

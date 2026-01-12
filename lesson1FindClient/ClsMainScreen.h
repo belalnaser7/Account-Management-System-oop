@@ -7,6 +7,7 @@
 #include "AddNewClient.h"
 #include "DeleteAccount.h"
 #include "UpdateAccount.h"
+#include "Transcations.h"
 #include "/Users/dell/Desktop/libraries/ClsInputValidate.h"
 using namespace std;
 class ClsMainScreen : protected ClsScreen
@@ -44,7 +45,7 @@ class ClsMainScreen : protected ClsScreen
     }
     static void ShowTransaction()
     {
-        cout << "Transaction Screen\n";
+        ClsTranscations::ShowTransactions();
     }
     static void ShowManageUsers()
     {
