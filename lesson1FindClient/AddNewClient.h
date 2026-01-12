@@ -2,6 +2,7 @@
 #include <iostream>
 #include "ClsBankClient.h"
 #include "ClsScreen.h"
+#include "PrintAccount.h"
 #include "/Users/dell/Desktop/libraries/ClsInputValidate.h"
 using namespace std;
 class AddNewClient :protected ClsScreen
@@ -10,7 +11,7 @@ private:
   static void ReadClientData(ClsBankClient &client)
 {
    cout << "Enter First Name: ";
-   client.SetFristName(clsInputValidate::ReadString());
+   client.SetFirstName(clsInputValidate::ReadString());
    cout << "Enter Last Name: ";
    client.SetLastName(clsInputValidate::ReadString());
    cout << "Enter Email: ";
@@ -37,13 +38,13 @@ static void AddNewAccount(){
         ReadClientData(client);
         switch (client.SaveToFile())
         {
-        case ClsBankClient::enSaveMode::SaveSucceded:
+        case ClsBankClient::enSaveMode::SaveSucceeded:
            cout << "Account added successfully.\n";
-           client.Print();
+             ClsPrintAccount::PrintAccountCard(client);
            break;
         case ClsBankClient::enSaveMode::svFaildedAccountExists:
            cout << "Account already exists. Please try again.\n";
-           client.Print();
+          ClsPrintAccount::PrintAccountCard(client);
            break;
         case ClsBankClient::enSaveMode::svFaildedAccountEmpty:
            cout << "Failed to add account. Account data is empty.\n";

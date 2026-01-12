@@ -80,7 +80,7 @@ private:
     // Serialize a ClsBankClient object into a CSV line
     static string _SerializeAccount(const ClsBankClient &client)
     {
-        return client.GetFristName() + "," +
+        return client.GetFirstName() + "," +
                client.GetLastName() + "," +
                client.GetEmail() + "," +
                client.GetPhone() + "," +
@@ -252,7 +252,7 @@ bool Delete(){
     enum enSaveMode
     {
         svFaildedAccountEmpty = 0,
-        SaveSucceded = 1,
+        SaveSucceeded = 1,
         svFaildedAccountExists = 2
     };
     enSaveMode SaveToFile()
@@ -263,7 +263,7 @@ bool Delete(){
             return enSaveMode::svFaildedAccountEmpty;
         case enMode::UpdateMode:
             _update();
-            return enSaveMode::SaveSucceded;
+            return enSaveMode::SaveSucceeded;
         case enMode::AddMode:
             if (ClsBankClient::IsFound(stoi(_AccountNumber)))
             {
@@ -273,7 +273,7 @@ bool Delete(){
             {
                 _AddNewAccount();
                 _Mode = enMode::UpdateMode;
-                return enSaveMode::SaveSucceded;
+                return enSaveMode::SaveSucceeded;
             }
         }
         return enSaveMode::svFaildedAccountEmpty;
@@ -304,21 +304,4 @@ bool Delete(){
         return static_cast<int>(clients.size());
     }
 
-    // =========================
-    // DISPLAY
-    // =========================
-    void Print() const
-    {
-        cout << "\nClient Card:";
-        cout << "\n___________________";
-        cout << "\nFirstName   : " << GetFristName();
-        cout << "\nLastName    : " << GetLastName();
-        cout << "\nEmail       : " << GetEmail();
-        cout << "\nPhone       : " << GetPhone();
-        cout << "\nFull Name   : " << GetFullName();
-        cout << "\nAcc. Number : " << _AccountNumber;
-        cout << "\nPinCode     : " << _Pincode;
-        cout << "\nBalance     : " << _AccountBalance;
-        cout << "\n___________________\n";
-    }
 };

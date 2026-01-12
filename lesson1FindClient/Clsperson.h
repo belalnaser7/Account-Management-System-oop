@@ -21,7 +21,7 @@ public:
     }
    
 
-    string GetFristName() const
+    string GetFirstName() const
     {
         return _FirstName;
     }
@@ -37,7 +37,7 @@ public:
     {
         return _Phone;
     }
-    void SetFristName(string _FirstName)
+    void SetFirstName(string _FirstName)
     {
         this->_FirstName = _FirstName;
     }

@@ -3,6 +3,7 @@
 #include <string>
 #include "ClsBankClient.h"
 #include "ClsScreen.h"
+#include "PrintAccount.h"
 #include "/Users/dell/Desktop/libraries/ClsInputValidate.h"
 using namespace std;
 class ClsFindAccountClient : protected ClsScreen
@@ -24,7 +25,7 @@ class ClsFindAccountClient : protected ClsScreen
         if (ClsBankClient::IsFound(accNum))
         {
             ClsBankClient client = ClsBankClient::Find(accNum);
-            client.Print();
+            ClsPrintAccount::PrintAccountCard(client);
             return;
         }
 
@@ -46,7 +47,7 @@ class ClsFindAccountClient : protected ClsScreen
             pincode = clsInputValidate::readnumber("Enter PinCode to FindClient: ");
         }
         ClsBankClient client = ClsBankClient::Find(accNum, pincode);
-        client.Print();
+        ClsPrintAccount::PrintAccountCard(client);
     }
     static void PerformFindAccountMenueOption(En_FindAccountMenuOptions Option)
     {

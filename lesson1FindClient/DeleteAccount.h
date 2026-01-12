@@ -2,6 +2,7 @@
 #include <iostream>
 #include "ClsBankClient.h"
 #include "ClsScreen.h"
+#include "PrintAccount.h"
 #include "/Users/dell/Desktop/libraries/ClsInputValidate.h"
 using namespace std;
 class ClsDeleteAccount : protected ClsScreen
@@ -23,7 +24,7 @@ public:
             else
             {
                 ClsBankClient client = ClsBankClient::Find(accNum);
-                client.Print();
+                ClsPrintAccount::PrintAccountCard(client);
                 cout << "Are you sure you want to delete this account? (Y/N): ";
                 char confirmation = 'N';
                 cin >> confirmation;
@@ -32,7 +33,8 @@ public:
                     if (client.Delete())
                     {
                         cout << "Account deleted successfully.\n";
-                        client.Print();
+                        ClsPrintAccount::PrintAccountCard(client);
+                        break;
                     }
                     else
                     {

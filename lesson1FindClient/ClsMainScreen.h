@@ -111,7 +111,7 @@ public:
             int Choice = clsInputValidate::ReadIntNumberBetween("\n\n\t\t\t\tChoose what do you want to do? [1-8]: ", 1, 8);
             PerformMainMenueOption((En_MainMenuOptions)Choice);
             cout << "" << "\n\tPress any key to go back to Main Menue...\n";
-            system("pause>0");
+            system("pause");
         }
     }
 };
