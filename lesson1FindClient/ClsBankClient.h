@@ -4,15 +4,33 @@
 #include <vector>
 #include "/Users/dell/Desktop/libraries/Clsstring.h"
 #include "ClsPerson.h"
-
+#if 1
+#define ENUMERATIONS 1
+#define Member_Variables 1
+#define Empty_Client_Object 1
+#define Transfer_To_Line_And_Save_In_File 1
+#define Serialize 1
+#define Save_Accounts_To_File 1
+#define Deserialize 1
+#define Load_Accounts_From_File 1
+#define Constructor 1
+#define To_Update 1
+#define To_Add 1
+#define To_Delete 1
+#define To_Find 1
+#define Is_Found 1
+#define To_SAVE 1
+#define Total_Balances 1
+#define Getters_Setters 1
+#define Total_Number_Of_Clients 1
+#define Get_Clients_List 1
+#define Check_If_Object_Is_Empty 1
+#endif
 using namespace std;
-
 class ClsBankClient : public ClsPerson
 {
 private:
-    // =========================
-    // ENUMERATIONS
-    // =========================
+#if ENUMERATIONS
     enum enMode
     {
         EmptyMode = 0,
@@ -29,37 +47,61 @@ private:
         FldPincode = 5,
         FldAccountBalance = 6
     };
-
-    // =========================
-    // Member variables
-    // =========================
-
+#endif
+#if Member_Variables
     enMode _Mode;
     string _AccountNumber;
     string _Pincode;
     int _AccountBalance;
     bool MarkedForDelete = false;
-
-    // Return an empty client object
+#endif
+#if Empty_Client_Object
     static ClsBankClient _GetEmptyClientObject()
     {
         return ClsBankClient(enMode::EmptyMode, "", "", "", "", "", "", 0);
     }
-    // Deserialize a CSV line into a ClsBankClient object
+#endif
+#if Transfer_To_Line_And_Save_In_File
+#if Serialize
+    static string _SerializeAccount(const ClsBankClient &client)
+    {
+        return client.GetFirstName() + "," +
+               client.GetLastName() + "," +
+               client.GetEmail() + "," +
+               client.GetPhone() + "," +
+               client.GetAccountNumber() + "," +
+               client.GetPincode() + "," +
+               to_string(client.GetAccountBalance());
+    }
+#endif
+#if Save_Accounts_To_File
+    static void _SaveAccountsToFile(const vector<ClsBankClient> &clients)
+    {
+        string line;
+        ofstream fout("belal.txt", ios::trunc); // Open file in truncate mode to overwrite existing content
+        for (const auto &client : clients)
+        {
+            if (client.MarkedForDelete)
+                continue; // Skip clients marked for deletion
+            line = _SerializeAccount(client);
+            fout << line << endl;
+        }
+        fout.close();
+    }
+#endif
+#endif
+#if Deserialize
     static ClsBankClient _deserializeAccount(const string &line)
     {
         vector<string> parts = ClsString::Split(line, ",");
-
         if (parts.size() != 7)
         {
-            // cout << "Invalid line found: " << line << endl;
             return _GetEmptyClientObject();
         }
-
-        float balance = 0;
+        int balance = 0;
         try
         {
-            balance = stof(parts[enFields::FldAccountBalance]);
+            balance = stoi(parts[enFields::FldAccountBalance]);
         }
         catch (...)
         {
@@ -77,25 +119,14 @@ private:
             balance                            // AccountBalance
         );
     }
-    // Serialize a ClsBankClient object into a CSV line
-    static string _SerializeAccount(const ClsBankClient &client)
-    {
-        return client.GetFirstName() + "," +
-               client.GetLastName() + "," +
-               client.GetEmail() + "," +
-               client.GetPhone() + "," +
-               client.GetAccountNumber() + "," +
-               client.GetPincode() + "," +
-               to_string(client.GetAccountBalance());
-    }
-    // Load all accounts from file
+#endif
+#if Load_Accounts_From_File
     static vector<ClsBankClient> _LoadAccountsFromFile()
     {
         vector<ClsBankClient> Vclient;
         fstream fin("belal.txt");
         if (!fin.is_open())
             return Vclient;
-
         string line;
         while (getline(fin, line))
         {
@@ -103,25 +134,11 @@ private:
                 continue;
             Vclient.push_back(_deserializeAccount(line));
         }
-
         fin.close();
         return Vclient;
     }
-    // Save all accounts to file after update
-    static void _SaveAccountsToFile(const vector<ClsBankClient> &clients)
-    {
-        string line;
-        ofstream fout("belal.txt", ios::trunc); // Open file in truncate mode to overwrite existing content
-        for (const auto &client : clients)
-        {
-            if (client.MarkedForDelete)
-                continue; // Skip clients marked for deletion
-            line = _SerializeAccount(client);
-            fout << line << endl;
-        }
-        fout.close();
-    }
-    // Update the current client in the file
+#endif
+#if To_Update
     void _update()
     {
         vector<ClsBankClient> clients = _LoadAccountsFromFile();
@@ -136,7 +153,8 @@ private:
         }
         _SaveAccountsToFile(clients);
     }
-   // Add the current client to the file
+#endif
+#if To_Add
     void _AddNewAccount()
     {
         vector<ClsBankClient> clients = _LoadAccountsFromFile();
@@ -144,37 +162,9 @@ private:
         _SaveAccountsToFile(clients);
         _Mode = enMode::AddMode;
     }
-
-    
+#endif
 public:
-bool Delete(){
-    vector<ClsBankClient> clients = _LoadAccountsFromFile();
-    // for (auto &&i : clients)
-    // {
-    //     if (i.GetAccountNumber() == _AccountNumber)
-    //     {
-    //         i.MarkedForDelete = true;
-    //         break;
-    //     }
-    // }
-    // _SaveAccountsToFile(clients);
-    // *this = _GetEmptyClientObject();
-    // return true;
-  
-    for (auto it = clients.begin(); it != clients.end(); ++it)
-    {
-        if (it->GetAccountNumber() == GetAccountNumber())
-        {
-            clients.erase(it);
-            _SaveAccountsToFile(clients);
-            *this = _GetEmptyClientObject();
-            return true; // Deletion successful
-        }
-    }
-    return false; // Account not found
-
-}
-   
+#if Constructor
     ClsBankClient(enMode Mode,
                   string FirstName,
                   string LastName,
@@ -189,18 +179,8 @@ bool Delete(){
         _Pincode = PinCode;
         _AccountBalance = AccountBalance;
     }
-
-    // =========================
-    // PROPERTY CHECKS
-    // =========================
-    bool IsEmpty() const
-    {
-        return (_Mode == EmptyMode);
-    }
-
-    // =========================
-    // GETTERS & SETTERS
-    // =========================
+#endif
+#if Getters_Setters
     string GetAccountNumber() const { return _AccountNumber; }
 
     void SetPincode(string Pin) { _Pincode = Pin; }
@@ -208,8 +188,14 @@ bool Delete(){
 
     void SetAccountBalance(float Balance) { _AccountBalance = Balance; }
     float GetAccountBalance() const { return _AccountBalance; }
-
-    // Find by AccountNumber
+#endif
+#if Check_If_Object_Is_Empty
+    bool IsEmpty() const
+    {
+        return (_Mode == EmptyMode);
+    }
+#endif
+#if To_Find
     static ClsBankClient Find(int AccountNumber)
     {
         vector<ClsBankClient> clients = _LoadAccountsFromFile();
@@ -220,7 +206,6 @@ bool Delete(){
         }
         return _GetEmptyClientObject();
     }
-
     // Find by AccountNumber + PinCode
     static ClsBankClient Find(int AccountNumber, const int &Pincode)
     {
@@ -228,33 +213,33 @@ bool Delete(){
         for (auto &Account : clients)
         {
             if (to_string(AccountNumber) == Account.GetAccountNumber() &&
-                to_string(Pincode) == Account.GetPincode() )
+                to_string(Pincode) == Account.GetPincode())
                 return Account;
         }
         return _GetEmptyClientObject();
     }
-
     // Check if account exists (by AccountNumber)
     static bool IsFound(int AccountNumber)
     {
         ClsBankClient Account = Find(AccountNumber);
         return !Account.IsEmpty();
     }
-
     // Check if account exists (by AccountNumber + PinCode)
     static bool IsFound(int AccountNumber, const int &Pincode)
     {
         ClsBankClient Account = Find(AccountNumber, Pincode);
         return !Account.IsEmpty();
     }
-
-    // Account Saved to file after update
+#endif
+#if ENUMERATIONS
     enum enSaveMode
     {
         svFaildedAccountEmpty = 0,
         SaveSucceeded = 1,
         svFaildedAccountExists = 2
     };
+#endif
+#if To_SAVE
     enSaveMode SaveToFile()
     {
         switch (_Mode)
@@ -278,15 +263,20 @@ bool Delete(){
         }
         return enSaveMode::svFaildedAccountEmpty;
     }
-
+#endif
+#if To_Add
     static ClsBankClient AddObjectToFile(int accountNumber)
     {
         return ClsBankClient(enMode::AddMode, "", "", "", "", to_string(accountNumber), "", 0);
     }
+#endif
+#if Get_Clients_List
     static vector<ClsBankClient> GetClientsList()
     {
         return _LoadAccountsFromFile();
     }
+#endif
+#if Total_Balances
     static int totalBalances()
     {
         vector<ClsBankClient> clients = _LoadAccountsFromFile();
@@ -297,11 +287,45 @@ bool Delete(){
         }
         return total;
     }
+#endif
+#if Total_Number_Of_Clients 1
+
     static int NumberOfClientsCount()
     {
         vector<ClsBankClient> clients = _LoadAccountsFromFile();
-        
+
         return static_cast<int>(clients.size());
     }
-
+#endif
+#if To_Delete
+    bool Delete()
+    {
+        vector<ClsBankClient> clients = _LoadAccountsFromFile();
+#if 0 // this is method using MarkedForDelete
+            for (auto &&i : clients)
+            {
+                if (i.GetAccountNumber() == _AccountNumber)
+                {
+                    i.MarkedForDelete = true;
+                    break;
+                }
+            }
+            _SaveAccountsToFile(clients);
+            *this = _GetEmptyClientObject();
+            return true;
+#else // this is method using iterator
+        for (auto it = clients.begin(); it != clients.end(); ++it)
+        {
+            if (it->GetAccountNumber() == GetAccountNumber())
+            {
+                clients.erase(it);
+                _SaveAccountsToFile(clients);
+                *this = _GetEmptyClientObject();
+                return true;
+            }
+        }
+        return false;
+#endif
+    }
+#endif
 };
