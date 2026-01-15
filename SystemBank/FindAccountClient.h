@@ -5,6 +5,7 @@
 #include "ClsScreen.h"
 #include "PrintAccount.h"
 #include "/Users/dell/Desktop/libraries/ClsInputValidate.h"
+#include "Global.h"
 using namespace std;
 class ClsFindAccountClient : protected ClsScreen
 {
@@ -14,27 +15,27 @@ class ClsFindAccountClient : protected ClsScreen
         eFindByPinCode = 2
     };
     static void ShowFindByAccountNumber()
-{
-    int count = 0;
-    int accNum;
-
-    while (count < 3)
     {
-        accNum = clsInputValidate::readnumber("Enter Account Number to FindClient: ");
+        int count = 0;
+        int accNum;
 
-        if (ClsBankClient::IsFound(accNum))
+        while (count < 3)
         {
-            ClsBankClient client = ClsBankClient::Find(accNum);
-            ClsPrintAccount::PrintAccountCard(client);
-            return;
+            accNum = clsInputValidate::readnumber("Enter Account Number to FindClient: ");
+
+            if (ClsBankClient::IsFound(accNum))
+            {
+                ClsBankClient client = ClsBankClient::Find(accNum);
+                ClsPrintAccount::PrintAccountCard(client);
+                return;
+            }
+
+            count++;
+            cout << "Account not found. Attempts left: " << (3 - count) << "\n";
         }
 
-        count++;
-        cout << "Account not found. Attempts left: " << (3 - count) << "\n";
+        cout << "You have exceeded the maximum number of attempts.\n";
     }
-
-    cout << "You have exceeded the maximum number of attempts.\n";
-}
 
     static void ShowFindByPincodeAndAccountNumber()
     {
@@ -67,7 +68,12 @@ class ClsFindAccountClient : protected ClsScreen
 public:
     static void ShowFindAccountClient()
     {
-        ClsScreen::DisplayScreenTitle("Find Account Client");
+       if(!CheckAccessRights(ClsUser::enPermissions::pFindClient))
+        {
+              DisplayScreenTitle("\033[31mYou Don't Have Permission to Find Client\033[0m");
+            return;
+        }
+        DisplayScreenTitle("\tFind Account Client");
         int choice = clsInputValidate::readnumber("1. Find by Account Number\n2. Find by PinCode\nEnter your choice: ");
         PerformFindAccountMenueOption((En_FindAccountMenuOptions)choice);
     }

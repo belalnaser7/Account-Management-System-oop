@@ -10,6 +10,11 @@ class ClsDeleteAccount : protected ClsScreen
 public:
     static void DeleteAccount()
     {
+        if(!CheckAccessRights(ClsUser::enPermissions::pDeleteClient))
+        {
+              DisplayScreenTitle("\033[31mYou Don't Have Permission to Delete Client\033[0m");
+            return;
+        }
         ClsScreen::DisplayScreenTitle("Delete Client Screen");
         int count = 0;
         int accNum = 0;

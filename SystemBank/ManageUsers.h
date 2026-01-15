@@ -11,7 +11,7 @@
 using namespace std;
 class CLsManageUsers : protected ClsScreen
 {
- enum enManageUsersOptions
+    enum enManageUsersOptions
     {
         eListUsers = 1,
         eAddNewUser = 2,
@@ -32,11 +32,10 @@ class CLsManageUsers : protected ClsScreen
         cout << "\t\t\t\t\t[5] Find User.\n";
         cout << "\t\t\t\t\t[6] Main Menu.\n";
         cout << "\t\t\t\t=========================================\n";
-
-      
     }
 
-    static void _PerformManageUsersOption(enManageUsersOptions Option){
+    static void _PerformManageUsersOption(enManageUsersOptions Option)
+    {
         switch (Option)
         {
         case eListUsers:
@@ -66,26 +65,29 @@ class CLsManageUsers : protected ClsScreen
             break;
         }
     }
-    
 
 public:
     static void ShowManageUsersScreen()
     {
-        DisplayScreenTitle("Manage Users Screen");
+        if (!CheckAccessRights(ClsUser::enPermissions::pManageUsers))
+        {
+            DisplayScreenTitle("\033[31mYou Don't Have Permission to Manage Users\033[0m");
+            return;
+        }
+        DisplayScreenTitle("\tManage Users Screen");
         bool exit = false;
         while (!exit)
         {
             _ManageUsersMenu();
             int Option = clsInputValidate::ReadIntNumberBetween("Choose what you want to do (1-6): ", 1, 6);
-            _PerformManageUsersOption( (enManageUsersOptions)Option);
-            if (Option == eMainMenu){
+            _PerformManageUsersOption((enManageUsersOptions)Option);
+            if (Option == eMainMenu)
+            {
                 exit = false;
                 break;
             }
-            cout <<"press any key to continue...";
-        system("pause");
+            cout << "press any key to continue...";
+            system("pause");
         }
-        
     }
-   
 };

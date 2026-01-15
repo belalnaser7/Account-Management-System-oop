@@ -85,6 +85,11 @@ class ClsUpdateAccount : protected ClsScreen
 public:
     static void UpdateAccount()
     {
+        if(!CheckAccessRights(ClsUser::enPermissions::pUpdateClient))
+        {
+              DisplayScreenTitle("\033[31mYou Don't Have Permission to Update Client\033[0m");
+            return;
+        }
         DisplayScreenTitle("Update Client Screen");
         int count = 0;
         int accNum = 0;

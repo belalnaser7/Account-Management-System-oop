@@ -10,6 +10,7 @@
 #include "Transcations.h"
 #include "ManageUsers.h"
 #include "/Users/dell/Desktop/libraries/ClsInputValidate.h"
+#include "Global.h"
 using namespace std;
 class ClsMainScreen : protected ClsScreen
 {
@@ -52,10 +53,10 @@ class ClsMainScreen : protected ClsScreen
     {
         CLsManageUsers::ShowManageUsersScreen();
     }
-    static bool Exit()
+    static void Exit()
     {
         cout << "\n\t\t\t\tThank you for using our system. Goodbye!\n";
-        return true;
+        CurrentUser = ClsUser::Find("", 0);
     }
     static void PerformMainMenueOption(En_MainMenuOptions Option)
     {
@@ -91,7 +92,7 @@ class ClsMainScreen : protected ClsScreen
             break;
         case eExit:
             system("cls");
-            cout << Exit();
+            Exit();
             break;
         }
     }
@@ -110,9 +111,15 @@ public:
             cout << "\n\t\t\t\t\t[5] Show Clients List.";
             cout << "\n\t\t\t\t\t[6] Transactions.";
             cout << "\n\t\t\t\t\t[7] Manage Users.";
-            cout << "\n\t\t\t\t\t[8] Exit.";
+            cout << "\n\t\t\t\t\t[8] Logout.";
             int Choice = clsInputValidate::ReadIntNumberBetween("\n\n\t\t\t\tChoose what do you want to do? [1-8]: ", 1, 8);
             PerformMainMenueOption((En_MainMenuOptions)Choice);
+            if (Choice == eExit)
+            {
+
+                break;
+            }
+
             cout << "" << "\n\tPress any key to go back to Main Menue...\n";
             system("pause");
         }

@@ -56,6 +56,13 @@ class ClsTranscations : protected ClsScreen
 public:
     static void ShowTransactions()
     {
+        if(!CheckAccessRights(ClsUser::enPermissions::pTranactions))
+        {
+              DisplayScreenTitle("\033[31mYou Don't Have Permission to Transactions\033[0m");
+            return;
+        }
+
+
         bool exit = false;
         while (!exit)
         {

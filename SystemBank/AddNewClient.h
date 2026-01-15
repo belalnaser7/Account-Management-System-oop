@@ -24,6 +24,11 @@ private:
 }
 public:
 static void AddNewAccount(){
+   if(!CheckAccessRights(ClsUser::enPermissions::pAddClient))
+        {
+              DisplayScreenTitle("\033[31mYou Don't Have Permission to Add New Client\033[0m");
+            return;
+        }
     ClsScreen::DisplayScreenTitle("Add New Client Screen");
     int count = 0;
     int accNum=0;

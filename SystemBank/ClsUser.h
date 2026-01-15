@@ -49,7 +49,7 @@ private:
     string _UserName;
     string _Password;
     int _permissions;
-    bool _IsMarkedForDelete=false;
+    bool _IsMarkedForDelete = false;
 #endif
 #if Empty_User_Object
     static ClsUser _GetEmptyUserObject()
@@ -106,13 +106,13 @@ private:
         // Construct object in UpdateMode (real User)
         return ClsUser(
             enMode::UpdateMode,
-            parts[enFields::FldFirstName],     // FirstName
-            parts[enFields::FldLastName],      // LastName
-            parts[enFields::FldEmail],         // Email
-            parts[enFields::FldPhone],         // Phone
-            parts[enFields::FldUserName],      // UserName
-            parts[enFields::FldPassword],       // Password
-             Permissions                           // permissions
+            parts[enFields::FldFirstName], // FirstName
+            parts[enFields::FldLastName],  // LastName
+            parts[enFields::FldEmail],     // Email
+            parts[enFields::FldPhone],     // Phone
+            parts[enFields::FldUserName],  // UserName
+            parts[enFields::FldPassword],  // Password
+            Permissions                    // permissions
         );
     }
 #endif
@@ -221,17 +221,17 @@ public:
     }
 #endif
 #if ENUMERATIONS
-enum enPermissions
+    enum enPermissions
     {
-    pAll=-1,
-    pListClients=1,
-    pAddClient=2,
-    pUpdateClient=4,
-    pDeleteClient=8,
-    pFindClient=16,
-    pTranactions=32,
-    pManageUsers=64
-};
+        pAll = -1,
+        pListClients = 1,
+        pAddClient = 2,
+        pUpdateClient = 4,
+        pDeleteClient = 8,
+        pFindClient = 16,
+        pTranactions = 32,
+        pManageUsers = 64
+    };
     enum enSaveMode
     {
         svFaildedAccountEmpty = 0,
@@ -267,7 +267,7 @@ enum enPermissions
 #if To_Add
     static ClsUser AddObjectToFile(string UserName)
     {
-        return ClsUser(enMode::AddMode, "", "", "", "", UserName , "", 0);
+        return ClsUser(enMode::AddMode, "", "", "", "", UserName, "", 0);
     }
 #endif
 #if Get_Users_List
@@ -307,8 +307,18 @@ enum enPermissions
 #endif
     }
 #endif
-static vector<ClsUser> GetUsersLists()
-{
-   return _LoadAccountsFromFile();
-}
+    static vector<ClsUser> GetUsersLists()
+    {
+        return _LoadAccountsFromFile();
+    }
+    bool CheckAccessPermission(enPermissions Permission)
+    {
+        if (this->_permissions == pAll)
+            return true;
+
+        if (this->_permissions & Permission)
+            return true;
+        else
+            return false;
+    }
 };
