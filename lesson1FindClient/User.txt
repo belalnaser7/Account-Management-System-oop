@@ -1,0 +1,3 @@
+kaml,Ali,AliK44@gimail.com,012452102,User1,11205,-1
+omar,khaled,OMk1245@gimail.com,012458632,User2,2210,-1
+Belal,Nasser,Bn155@gmail.com,012452102,User3,120,5

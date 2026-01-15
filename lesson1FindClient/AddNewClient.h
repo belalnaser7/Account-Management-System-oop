@@ -53,7 +53,6 @@ static void AddNewAccount(){
            break;
         }
         break;
-
      }
     }
     if(count>=3){

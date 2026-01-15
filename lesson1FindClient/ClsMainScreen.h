@@ -8,6 +8,7 @@
 #include "DeleteAccount.h"
 #include "UpdateAccount.h"
 #include "Transcations.h"
+#include "ManageUsers.h"
 #include "/Users/dell/Desktop/libraries/ClsInputValidate.h"
 using namespace std;
 class ClsMainScreen : protected ClsScreen
@@ -49,7 +50,7 @@ class ClsMainScreen : protected ClsScreen
     }
     static void ShowManageUsers()
     {
-        cout << "Manage Users Screen\n";
+        CLsManageUsers::ShowManageUsersScreen();
     }
     static bool Exit()
     {
@@ -90,17 +91,18 @@ class ClsMainScreen : protected ClsScreen
             break;
         case eExit:
             system("cls");
-           cout << Exit();
+            cout << Exit();
             break;
         }
     }
+
 public:
     static void ShowMainScreen()
-    {  
+    {
         while (true)
         {
             system("cls");
-        ClsScreen::DisplayScreenTitle("Main Screen");
+            ClsScreen::DisplayScreenTitle("Main Screen");
             cout << "\n\t\t\t\t\t[1] Find Client.";
             cout << "\n\t\t\t\t\t[2] Add New Client.";
             cout << "\n\t\t\t\t\t[3] Delete Client.";

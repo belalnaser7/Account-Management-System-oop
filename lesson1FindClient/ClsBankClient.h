@@ -276,27 +276,6 @@ public:
         return _LoadAccountsFromFile();
     }
 #endif
-#if Total_Balances
-    static int totalBalances()
-    {
-        vector<ClsBankClient> clients = _LoadAccountsFromFile();
-        int total = 0;
-        for (const auto &client : clients)
-        {
-            total += client.GetAccountBalance();
-        }
-        return total;
-    }
-#endif
-#if Total_Number_Of_Clients 1
-
-    static int NumberOfClientsCount()
-    {
-        vector<ClsBankClient> clients = _LoadAccountsFromFile();
-
-        return static_cast<int>(clients.size());
-    }
-#endif
 #if To_Delete
     bool Delete()
     {
@@ -328,4 +307,26 @@ public:
 #endif
     }
 #endif
+#if Total_Balances
+    static int totalBalances()
+    {
+        vector<ClsBankClient> clients = _LoadAccountsFromFile();
+        int total = 0;
+        for (const auto &client : clients)
+        {
+            total += client.GetAccountBalance();
+        }
+        return total;
+    }
+#endif
+#if Total_Number_Of_Clients 
+
+    static int NumberOfClientsCount()
+    {
+        vector<ClsBankClient> clients = _LoadAccountsFromFile();
+
+        return static_cast<int>(clients.size());
+    }
+#endif
+
 };

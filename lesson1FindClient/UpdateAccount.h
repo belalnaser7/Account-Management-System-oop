@@ -85,7 +85,7 @@ class ClsUpdateAccount : protected ClsScreen
 public:
     static void UpdateAccount()
     {
-        ClsScreen::DisplayScreenTitle("Update Client Screen");
+        DisplayScreenTitle("Update Client Screen");
         int count = 0;
         int accNum = 0;
         while (count < 3)
