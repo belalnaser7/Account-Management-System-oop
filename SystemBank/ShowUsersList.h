@@ -15,6 +15,8 @@ class ShowUsersList : protected ClsScreen
         cout << "| " << left << setw(20) << user.GetEmail();
         cout << "| " << left << setw(10) << user.GetPassword();
         cout << "| " << left << setw(12) << user.GetPermissions();
+        cout << "\n_______________________________________________________";
+        cout << "_________________________________________\n";
     }
 
 public:

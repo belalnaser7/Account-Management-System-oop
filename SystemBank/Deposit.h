@@ -26,17 +26,9 @@ public:
                 ClsBankClient client = ClsBankClient::Find(accNum);
                 ClsPrintAccount::PrintAccountCard(client);
                 float amount = clsInputValidate::readnumber("Enter amount to deposit: ");
-                client.SetAccountBalance(client.GetAccountBalance() + amount);
-                if (client.SaveToFile() == ClsBankClient::enSaveMode::SaveSucceeded)
-                {
-                    cout << "Deposit successful. New balance: " << client.GetAccountBalance() << "\n";
-                    ClsPrintAccount::PrintAccountCard(client);
-                }
-                else
-                {
-                    cout << "Error saving the updated account information.\n";
-                };
-                break;
+                client.Deposit(amount);
+                cout << "Deposit successful. New balance: " << client.GetAccountBalance() << "\n";
+                ClsPrintAccount::PrintAccountCard(client);
             }
         }
         if (count >= 3)

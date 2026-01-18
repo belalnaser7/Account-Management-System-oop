@@ -68,6 +68,11 @@ class ClsAddUser : protected ClsScreen
             {
                 permissions |= 64;
             }
+            cout << "Show Logs List \n";
+            if (clsInputValidate::boolread())
+            {
+                permissions |= 128;
+            }
         }
         return permissions;
     }

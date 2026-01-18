@@ -17,6 +17,9 @@ class ClsShowClientsList : protected ClsScreen
         cout << "| " << setw(20) << left << Client.GetEmail();
         cout << "| " << setw(10) << left << Client.GetPincode();
         cout << "| " << setw(12) << left << Client.GetAccountBalance();
+        cout << "\n_______________________________________________________";
+        cout << "_________________________________________\n";
+        
     }
 
 public:

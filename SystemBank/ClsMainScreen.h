@@ -9,6 +9,7 @@
 #include "UpdateAccount.h"
 #include "Transcations.h"
 #include "ManageUsers.h"
+#include "ShowLogsList.h"
 #include "/Users/dell/Desktop/libraries/ClsInputValidate.h"
 #include "Global.h"
 using namespace std;
@@ -23,7 +24,8 @@ class ClsMainScreen : protected ClsScreen
         eAllClientsList = 5,
         eTransaction = 6,
         eManageUsers = 7,
-        eExit = 8
+        eShowLogsList = 8,
+        eExit = 9
     };
     static void ShowFindClient()
     {
@@ -52,6 +54,10 @@ class ClsMainScreen : protected ClsScreen
     static void ShowManageUsers()
     {
         CLsManageUsers::ShowManageUsersScreen();
+    }
+    static void ShowLogsList()
+    {
+        ShowLogsList::ShowLogsListScreen();
     }
     static void Exit()
     {
@@ -90,6 +96,10 @@ class ClsMainScreen : protected ClsScreen
             system("cls");
             ShowManageUsers();
             break;
+        case eShowLogsList:
+            system("cls");
+            ShowLogsList();
+            break;
         case eExit:
             system("cls");
             Exit();
@@ -111,12 +121,12 @@ public:
             cout << "\n\t\t\t\t\t[5] Show Clients List.";
             cout << "\n\t\t\t\t\t[6] Transactions.";
             cout << "\n\t\t\t\t\t[7] Manage Users.";
-            cout << "\n\t\t\t\t\t[8] Logout.";
-            int Choice = clsInputValidate::ReadIntNumberBetween("\n\n\t\t\t\tChoose what do you want to do? [1-8]: ", 1, 8);
+            cout << "\n\t\t\t\t\t[8] Show Logs List.";
+            cout << "\n\t\t\t\t\t[9] Exit.";
+            int Choice = clsInputValidate::ReadIntNumberBetween("\n\n\t\t\t\tChoose what do you want to do? [1-9]: ", 1, 9);
             PerformMainMenueOption((En_MainMenuOptions)Choice);
             if (Choice == eExit)
             {
-
                 break;
             }
 

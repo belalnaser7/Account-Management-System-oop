@@ -12,6 +12,7 @@ private:
     string _Phone;
 
 public:
+ClsPerson() {}
     ClsPerson(string _FirstName, string _LastName, string _Email, string _Phone)
     {
         this->_FirstName = _FirstName;

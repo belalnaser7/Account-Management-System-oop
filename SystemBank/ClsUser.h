@@ -2,8 +2,11 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "/Users/dell/Desktop/libraries/ClsDate.h"
 #include "/Users/dell/Desktop/libraries/Clsstring.h"
+ #include "/Users/dell/Desktop/libraries/Utility.h"
 #include "ClsPerson.h"
+#include <ctime>
 #if 1
 #define ENUMERATIONS 1
 #define Member_Variables 1
@@ -25,6 +28,16 @@
 using namespace std;
 class ClsUser : public ClsPerson
 {
+    public:
+       struct stLoginRegisterRecord
+    {
+        string Date;
+        string Time;
+        string UserName;
+        string Password;
+        int Permissions;
+
+    };
 private:
 #if ENUMERATIONS
     enum enMode
@@ -43,6 +56,15 @@ private:
         FldPassword = 5,
         FldPermissions = 6
     };
+    enum enFieldsLogs
+    {
+        Date = 0,
+        Time = 1,
+        UserName = 2,
+        Password = 3,
+        Permissions = 4
+    };
+  
 #endif
 #if Member_Variables
     enMode _Mode;
@@ -50,6 +72,8 @@ private:
     string _Password;
     int _permissions;
     bool _IsMarkedForDelete = false;
+   
+   
 #endif
 #if Empty_User_Object
     static ClsUser _GetEmptyUserObject()
@@ -59,6 +83,14 @@ private:
 #endif
 #if Transfer_To_Line_And_Save_In_File
 #if Serialize
+    string _SerlizeDataOFLogs(string dellem = "#//#")
+    {
+        return ClsDate::Gettodaydate() + dellem +
+               ClsDate::Gettodaytime() + dellem +
+               _UserName + dellem +
+               clsUtility::EncryptText(_Password) + dellem +
+               to_string(_permissions);
+    }
     static string _SerializeAccount(const ClsUser &User)
     {
         return User.GetFirstName() + "," +
@@ -66,11 +98,12 @@ private:
                User.GetEmail() + "," +
                User.GetPhone() + "," +
                User.GetUserName() + "," +
-               User.GetPassword() + "," +
+               clsUtility::EncryptText(User.GetPassword()) + "," +
                to_string(User.GetPermissions());
     }
 #endif
 #if Save_Accounts_To_File
+
     static void _SaveAccountsToFile(const vector<ClsUser> &Users)
     {
         string line;
@@ -87,6 +120,24 @@ private:
 #endif
 #endif
 #if Deserialize
+
+    static stLoginRegisterRecord _Deserializelogs(const string &line)
+    {
+        vector<string> parts = ClsString::Split(line, "#//#");
+        stLoginRegisterRecord LoginRegisterRecord;
+        if (parts.size() != 5)
+        {
+            return LoginRegisterRecord;
+        }
+        LoginRegisterRecord.Date = parts[enFieldsLogs::Date] ;
+        LoginRegisterRecord.Time=parts[enFieldsLogs::Time];
+        LoginRegisterRecord.UserName = parts[enFieldsLogs::UserName];
+        LoginRegisterRecord.Password = clsUtility::DecryptText(parts[enFieldsLogs::Password]);
+        LoginRegisterRecord.Permissions = stoi(parts[enFieldsLogs::Permissions]);
+        return LoginRegisterRecord;
+       
+       
+    }
     static ClsUser _deserializeAccount(const string &line)
     {
         vector<string> parts = ClsString::Split(line, ",");
@@ -111,12 +162,30 @@ private:
             parts[enFields::FldEmail],     // Email
             parts[enFields::FldPhone],     // Phone
             parts[enFields::FldUserName],  // UserName
-            parts[enFields::FldPassword],  // Password
+            clsUtility::DecryptText(parts[enFields::FldPassword]),  // Password
             Permissions                    // permissions
         );
     }
 #endif
 #if Load_Accounts_From_File
+
+static vector<stLoginRegisterRecord> _LoadLogsFromFile(){
+    vector<stLoginRegisterRecord> VloginRegisterRecord;
+    fstream fin("Logs.txt");
+    if (!fin.is_open())
+        return VloginRegisterRecord;
+    string line;
+    stLoginRegisterRecord LoginRegisterRecord;  
+    while (getline(fin, line))
+    {
+        if (line.empty())
+            continue;
+       LoginRegisterRecord= _Deserializelogs(line);
+       VloginRegisterRecord.push_back(LoginRegisterRecord);
+    }
+    fin.close();
+    return VloginRegisterRecord;
+}
     static vector<ClsUser> _LoadAccountsFromFile()
     {
         vector<ClsUser> VUser;
@@ -161,13 +230,22 @@ private:
 #endif
 public:
 #if Constructor
-    ClsUser(enMode Mode, string FirstName, string LastName, string Email, string Phone, string UserName, string Password, int permissions) : ClsPerson(FirstName, LastName, Email, Phone)
+ClsUser(enMode Mode, string FirstName, string LastName, string Email, string Phone, string UserName, string Password, int permissions) : ClsPerson(FirstName, LastName, Email, Phone)
     {
         _Mode = Mode;
         _UserName = UserName;
         _Password = Password;
         _permissions = permissions;
     }
+ #else
+    ClsUser(string date, string time, string UserName, string Password, string permissions): ClsPerson("", "", "", "") {
+   
+    _Date= date;
+    _Time= time;
+    _UserName = UserName;
+    _Password = Password;
+    _permissions = stoi(permissions);
+ };
 #endif
 #if Getters_Setters
     string GetUserName() const { return _UserName; }
@@ -230,7 +308,8 @@ public:
         pDeleteClient = 8,
         pFindClient = 16,
         pTranactions = 32,
-        pManageUsers = 64
+        pManageUsers = 64,
+        pShowLogs = 128
     };
     enum enSaveMode
     {
@@ -311,6 +390,7 @@ public:
     {
         return _LoadAccountsFromFile();
     }
+    
     bool CheckAccessPermission(enPermissions Permission)
     {
         if (this->_permissions == pAll)
@@ -320,5 +400,19 @@ public:
             return true;
         else
             return false;
+    }
+
+    void SaveDataOFLogsToFile()
+    {
+        string line;
+        ofstream fout("Logs.txt", ios::app);
+        line = _SerlizeDataOFLogs();
+        fout << line << endl;
+        fout.close();
+    }
+
+    static vector<stLoginRegisterRecord> GetLogsLists()
+    {
+        return _LoadLogsFromFile();
     }
 };

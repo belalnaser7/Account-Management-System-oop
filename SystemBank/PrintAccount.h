@@ -40,3 +40,18 @@ public:
         cout << "\n___________________\n";
     }
 };
+
+class ClsPrintTransaction
+{
+    public:
+        static void PrintTransactionCard(const ClsBankClient &client)
+        {
+            cout << "\nClient Card:";
+            cout << "\n___________________";
+            cout << "\nFull Name   : " << client.GetFullName();
+            cout << "\nAcc. Number : " << client.GetAccountNumber();
+            cout << "\nBalance     : " << client.GetAccountBalance();
+            cout << "\n___________________\n";
+        }
+
+};

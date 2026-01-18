@@ -101,41 +101,42 @@ class ClsUpdateUser:protected ClsScreen
             cout << "Add New Client \n";
             if (clsInputValidate::boolread())
             {
-                permissions |= 2;
+                permissions |= ClsUser::enPermissions::pAddClient;
             }
             cout << "Delete Client \n";
             if (clsInputValidate::boolread())
             {
-                permissions |= 4;
+                permissions |= ClsUser::enPermissions::pDeleteClient;
             }
             cout << "Update Client \n";
             if (clsInputValidate::boolread())
             {
-                permissions |= 8;
+                permissions |= ClsUser::enPermissions::pUpdateClient;
             }
             cout << "Find Client \n";
             if (clsInputValidate::boolread())
             {
-                permissions |= 16;
+                permissions |= ClsUser::enPermissions::pFindClient;
             }
             cout << "Transaction Account \n";
             if (clsInputValidate::boolread())
             {
-                permissions |= 32;
+                permissions |= ClsUser::enPermissions::pTranactions;
             }
             cout << "Manage Users \n";
             if (clsInputValidate::boolread())
             {
-                permissions |= 64;
+                permissions |= ClsUser::enPermissions::pManageUsers;
+            }
+            cout << "Show List of Registered Users \n";
+            if (clsInputValidate::boolread())
+            {
+                permissions |= ClsUser::enPermissions::pShowLogs;
             }
         }
         return permissions;
     }
-
-
-
-
-    
+ 
 public:
 static void UpdateUser()
     {

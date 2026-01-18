@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include "/Users/dell/Desktop/libraries/Clsstring.h"
+#include "/Users/dell/Desktop/libraries/ClsDate.h"
 #include "ClsPerson.h"
 #if 1
 #define ENUMERATIONS 1
@@ -29,7 +30,18 @@
 using namespace std;
 class ClsBankClient : public ClsPerson
 {
-private:
+public:
+    struct stTransaction
+    {
+        string Date;
+        string Time;
+        string S_AccountNumber;
+        string D_AccountNumber;
+        string Amount;
+        string S_AccountBalance;
+        string D_AccountBalance;
+        string UserName;
+    };
 #if ENUMERATIONS
     enum enMode
     {
@@ -46,6 +58,17 @@ private:
         FldAccountNumber = 4,
         FldPincode = 5,
         FldAccountBalance = 6
+    };
+    enum enTransactionFields
+    {
+        TDate = 0,
+        TTime = 1,
+        TSAccountNumber = 2,
+        TDAccountNumber = 3,
+        TAmount = 4,
+        TSAccountBalance = 5,
+        TDAccountBalance = 6,
+        TUserName = 7
     };
 #endif
 #if Member_Variables
@@ -73,6 +96,17 @@ private:
                client.GetPincode() + "," +
                to_string(client.GetAccountBalance());
     }
+    string _SerializeTransfer(const ClsBankClient &client, int amount, string UserName, const string &dellem = "#//#")
+    {
+        return ClsDate::Gettodaydate() + dellem +
+               ClsDate::Gettodaytime() + dellem +
+               _AccountNumber + dellem +
+               client.GetAccountNumber() + dellem +
+               to_string(amount) + "$" + dellem +
+               to_string(_AccountBalance) + "$" + dellem +
+               to_string(client.GetAccountBalance()) + "$" + dellem +
+               UserName;
+    }
 #endif
 #if Save_Accounts_To_File
     static void _SaveAccountsToFile(const vector<ClsBankClient> &clients)
@@ -88,9 +122,35 @@ private:
         }
         fout.close();
     }
+    void _SaveDataOFTransactionsToFile(ClsBankClient &DestinationClient, int amount, string UserName)
+    {
+        string line;
+        ofstream fout("Transactions.txt", ios::app);
+        line = _SerializeTransfer(DestinationClient, amount, UserName);
+        fout << line << endl;
+        fout.close();
+    }
 #endif
 #endif
 #if Deserialize
+    static stTransaction _DeserializeTransaction(const string &line)
+    {
+        vector<string> parts = ClsString::Split(line, "#//#");
+        if (parts.size() != 8)
+        {
+            return stTransaction();
+        }
+        stTransaction transaction;
+        transaction.Date = parts[TDate];
+        transaction.Time = parts[TTime];
+        transaction.S_AccountNumber = parts[TSAccountNumber];
+        transaction.D_AccountNumber = parts[TDAccountNumber];
+        transaction.Amount = parts[TAmount];
+        transaction.S_AccountBalance = parts[TSAccountBalance];
+        transaction.D_AccountBalance = parts[TDAccountBalance];
+        transaction.UserName = parts[TUserName];
+        return transaction;
+    }
     static ClsBankClient _deserializeAccount(const string &line)
     {
         vector<string> parts = ClsString::Split(line, ",");
@@ -121,6 +181,24 @@ private:
     }
 #endif
 #if Load_Accounts_From_File
+    static vector<stTransaction> _LoadTransactionsFromFile() 
+    {
+        vector<stTransaction> VTransaction;
+        fstream fin("Transactions.txt");
+        if (!fin.is_open())
+            return VTransaction;
+        string line;
+        //stTransaction Transaction;
+        while (getline(fin, line))
+        {
+            if (line.empty())
+                continue;
+                //Transaction = _DeserializeTransaction(line);
+            VTransaction.push_back(_DeserializeTransaction(line));
+        }
+        fin.close();
+        return VTransaction;
+    }
     static vector<ClsBankClient> _LoadAccountsFromFile()
     {
         vector<ClsBankClient> Vclient;
@@ -187,7 +265,7 @@ public:
     string GetPincode() const { return _Pincode; }
 
     void SetAccountBalance(float Balance) { _AccountBalance = Balance; }
-    float GetAccountBalance() const { return _AccountBalance; }
+    int GetAccountBalance() const { return _AccountBalance; }
 #endif
 #if Check_If_Object_Is_Empty
     bool IsEmpty() const
@@ -319,7 +397,7 @@ public:
         return total;
     }
 #endif
-#if Total_Number_Of_Clients 
+#if Total_Number_Of_Clients
 
     static int NumberOfClientsCount()
     {
@@ -327,6 +405,28 @@ public:
 
         return static_cast<int>(clients.size());
     }
-#endif
 
+#endif
+    void Deposit(int amount)
+    {
+        _AccountBalance += amount;
+        _update();
+    }
+    void Withdraw(int amount)
+    {
+        _AccountBalance -= amount;
+        _update();
+    }
+ static vector<stTransaction> DesplayTransactions() { return _LoadTransactionsFromFile(); }
+    bool Transfer(int amount, ClsBankClient &DestinationClient, string UserName)
+    {
+        if (amount <= _AccountBalance)
+        {
+            Withdraw(amount);
+            DestinationClient.Deposit(amount);
+            _SaveDataOFTransactionsToFile(DestinationClient, amount, UserName);
+            return true;
+        }
+        return false;
+    }
 };

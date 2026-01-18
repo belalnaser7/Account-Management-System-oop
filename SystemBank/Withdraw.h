@@ -32,16 +32,9 @@ public:
                 }
                 else
                 {
-                    client.SetAccountBalance(client.GetAccountBalance() - amount);
-                    if (client.SaveToFile() == ClsBankClient::enSaveMode::SaveSucceeded)
-                    {
-                        cout << "Withdrawal successful. New balance: " << client.GetAccountBalance() << "\n";
-                        ClsPrintAccount::PrintAccountCard(client);
-                    }
-                    else
-                    {
-                        cout << "Error saving the updated account information.\n";
-                    };
+                    client.Withdraw(amount);
+                    cout << "Withdrawal successful. New balance: " << client.GetAccountBalance() << "\n";
+                    ClsPrintAccount::PrintAccountCard(client);
                 }
                 break;
             }

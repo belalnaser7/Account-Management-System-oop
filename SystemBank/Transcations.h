@@ -6,6 +6,8 @@
 #include "ClsScreen.h"
 #include "Withdraw.h"
 #include "TotalBalances.h"
+#include "Transfer.h"
+#include "ShowTransctionList.h"
 using namespace std;
 class ClsTranscations : protected ClsScreen
 {
@@ -14,7 +16,9 @@ class ClsTranscations : protected ClsScreen
         Deposit = 1,
         Withdraw = 2,
         Total = 3,
-        MainMenu = 4
+        Transfer=4,
+        TransferList=5,
+        MainMenu = 6
     };
 
     static void _TransactionMenu()
@@ -25,7 +29,9 @@ class ClsTranscations : protected ClsScreen
         cout << "\t\t\t\t\t[1] Deposit Amount.\n";
         cout << "\t\t\t\t\t[2] Withdraw Amount.\n";
         cout << "\t\t\t\t\t[3] Total Balances.\n";
-        cout << "\t\t\t\t\t[4] Main Menu.\n";
+        cout << "\t\t\t\t\t[4] Transfer.\n";
+        cout << "\t\t\t\t\t[5] Transfer List.\n";
+        cout << "\t\t\t\t\t[6] Main Menu.\n";
         cout << "\t\t\t\t=========================================\n";
     }
     static void _PerformTransactionType(enTransactionType Type)
@@ -44,15 +50,21 @@ class ClsTranscations : protected ClsScreen
             system("cls");
             ClsTotalBalances::ShowTotalBalances();
             break;
+        case Transfer:
+            system("cls");
+            ClsTransfer::TransferAmount();
+            break;
+        case TransferList:
+            system("cls");
+           ClsShowTransctionList::ShowTransctionList();
+            break;
         case MainMenu:
             system("cls");
-
             break;
         default:
             break;
         }
     }
-
 public:
     static void ShowTransactions()
     {
@@ -61,21 +73,18 @@ public:
               DisplayScreenTitle("\033[31mYou Don't Have Permission to Transactions\033[0m");
             return;
         }
-
-
         bool exit = false;
         while (!exit)
         {
             ClsScreen::DisplayScreenTitle("Transactions Screen");
             _TransactionMenu();
-            int choice = clsInputValidate::ReadIntNumberBetween("Choose what you want to do (1-4): ", 1, 4);
+            int choice = clsInputValidate::ReadIntNumberBetween("Choose what you want to do (1-6): ", 1, 6);
             _PerformTransactionType((enTransactionType)choice);
             if (choice == enTransactionType::MainMenu)
             {
                 exit = true;
                 break;
             }
-
             cout << "\n\tPress any key to go back to Transactions Menu...\n";
             system("pause");
         }
