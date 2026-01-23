@@ -70,7 +70,7 @@ public:
     {
         if(!CheckAccessRights(ClsUser::enPermissions::pTranactions))
         {
-              DisplayScreenTitle("\033[31mYou Don't Have Permission to Transactions\033[0m");
+             BlockScreenDisplay("\033[31mYou Don't Have Permission to Transactions\033[0m");
             return;
         }
         bool exit = false;

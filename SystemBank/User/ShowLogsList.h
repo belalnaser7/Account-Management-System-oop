@@ -23,7 +23,7 @@ public:
    static void ShowLogsListScreen()
     {
         if(!CheckAccessRights(ClsUser::enPermissions::pShowLogs)){
-            DisplayScreenTitle("\033[31mYou Don't Have Permission to Show Logs\033[0m");
+          BlockScreenDisplay("\033[31mYou Don't Have Permission to Show Logs\033[0m");
             return;
         }
        DisplayScreenTitle("Show Logs List");

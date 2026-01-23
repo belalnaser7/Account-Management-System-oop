@@ -309,7 +309,8 @@ ClsUser(enMode Mode, string FirstName, string LastName, string Email, string Pho
         pFindClient = 16,
         pTranactions = 32,
         pManageUsers = 64,
-        pShowLogs = 128
+        pShowLogs = 128,
+        pCurranciesExchange = 256
     };
     enum enSaveMode
     {

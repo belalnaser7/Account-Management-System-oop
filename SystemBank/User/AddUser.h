@@ -73,6 +73,11 @@ class ClsAddUser : protected ClsScreen
             {
                 permissions |= 128;
             }
+            cout << "Currencies \n";
+            if (clsInputValidate::boolread())
+            {
+                permissions |= 256;
+            }
         }
         return permissions;
     }

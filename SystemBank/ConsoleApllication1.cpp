@@ -13,6 +13,5 @@ int main()
     exit = clsInputValidate::boolread();
 
   } while (exit);
-
   return 0;
 }

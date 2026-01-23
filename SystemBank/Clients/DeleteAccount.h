@@ -4,6 +4,10 @@
 #include "ClsScreen.h"
 #include "PrintAccount.h"
 #include "/Users/dell/Desktop/libraries/ClsInputValidate.h"
+#define RED "\033[31m"
+#define RESET "\033[0m"
+#define GREEN "\033[32m"
+#define Cryan "\033[36m"
 using namespace std;
 class ClsDeleteAccount : protected ClsScreen
 {
@@ -12,7 +16,7 @@ public:
     {
         if(!CheckAccessRights(ClsUser::enPermissions::pDeleteClient))
         {
-              DisplayScreenTitle("\033[31mYou Don't Have Permission to Delete Client\033[0m");
+              BlockScreenDisplay("\033[31mYou Don't Have Permission to Delete Client\033[0m");
             return;
         }
         ClsScreen::DisplayScreenTitle("Delete Client Screen");
@@ -23,7 +27,7 @@ public:
             accNum = clsInputValidate::readnumber("Enter Account Number to delete: ");
             if (!ClsBankClient::IsFound(accNum))
             {
-                cout << "Account not found. Please try again.\n";
+                cout <<RED<< "Account not found. Please try again.\n"<<RESET;
                 count++;
             }
             else
@@ -37,18 +41,18 @@ public:
                 {
                     if (client.Delete())
                     {
-                        cout << "Account deleted successfully.\n";
+                        cout <<GREEN<< "Account deleted successfully.\n"<<RESET;
                         ClsPrintAccount::PrintAccountCard(client);
                         break;
                     }
                     else
                     {
-                        cout << "Failed to delete account.\n";
+                        cout <<RED<< "Failed to delete account.\n"<<RESET;
                     }
                 }
                 else
                 {
-                    cout << "Account deletion canceled.\n";
+                    cout <<Cryan<< "Account deletion canceled.\n"<<RESET;
                 }
                 break;
             }
@@ -56,7 +60,7 @@ public:
 
         if (count >= 3)
         {
-            cout << "You have exceeded the maximum number of attempts.\n";
+            cout <<RED<< "You have exceeded the maximum number of attempts.\n"<<RESET;
         }
     }
 };

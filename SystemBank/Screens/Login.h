@@ -27,8 +27,9 @@ public:
           cout << "\033[32mLogin Successful\033[0m" << endl;
           cout << "\033[32mWelcome " << CurrentUser.GetFullName() << "\033[0m" << endl;
           cout << "\033[32mYou Have " << CurrentUser.GetPermissions() << " Permissions\033[0m" << endl;
-          cout << "\033[32mHave A Nice Day\033[0m\n press Enter to Open the System"  ;
-         system("pause");
+          cout << "\033[32mHave A Nice Day .\033[0m\n press Enter to Open the System....."  ;
+          cin.ignore();
+          cin.get();
         
        CurrentUser.SaveDataOFLogsToFile();
           ClsMainScreen::ShowMainScreen();

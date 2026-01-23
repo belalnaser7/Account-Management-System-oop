@@ -133,6 +133,11 @@ class ClsUpdateUser:protected ClsScreen
             {
                 permissions |= ClsUser::enPermissions::pShowLogs;
             }
+          cout << "Show List of Currencies \n";
+            if (clsInputValidate::boolread())
+            {
+                permissions |= ClsUser::enPermissions::pCurranciesExchange;
+            }
         }
         return permissions;
     }

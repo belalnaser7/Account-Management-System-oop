@@ -6,6 +6,9 @@
 #include "PrintAccount.h"
 #include "/Users/dell/Desktop/libraries/ClsInputValidate.h"
 #include "Global.h"
+#define RED "\033[31m"
+#define RESET "\033[0m"
+#define GREEN "\033[32m"
 using namespace std;
 class ClsFindAccountClient : protected ClsScreen
 {
@@ -43,7 +46,7 @@ class ClsFindAccountClient : protected ClsScreen
         int pincode = clsInputValidate::readnumber("Enter PinCode to FindClient: ");
         while (!ClsBankClient::IsFound(accNum, pincode))
         {
-            cout << "Account not found. Please try again.\n";
+            cout << RED << "Account not found. Please try again.\n"<<RESET;
             accNum = clsInputValidate::readnumber("Enter Account Number to FindClient: ");
             pincode = clsInputValidate::readnumber("Enter PinCode to FindClient: ");
         }
@@ -70,10 +73,10 @@ public:
     {
        if(!CheckAccessRights(ClsUser::enPermissions::pFindClient))
         {
-              DisplayScreenTitle("\033[31mYou Don't Have Permission to Find Client\033[0m");
+              BlockScreenDisplay("\033[31mYou Don't Have Permission to Find Client\033[0m");
             return;
         }
-        DisplayScreenTitle("\tFind Account Client");
+        DisplayScreenTitle("Find Account Client");
         int choice = clsInputValidate::readnumber("1. Find by Account Number\n2. Find by PinCode\nEnter your choice: ");
         PerformFindAccountMenueOption((En_FindAccountMenuOptions)choice);
     }

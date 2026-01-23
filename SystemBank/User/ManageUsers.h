@@ -22,15 +22,12 @@ class CLsManageUsers : protected ClsScreen
     };
     static void _ManageUsersMenu()
     {
-        cout << "\n\t\t\t\t=========================================\n";
-        cout << "\t\t\t\t\tManage Users Menu Options\n";
-        cout << "\t\t\t\t=========================================\n";
-        cout << "\t\t\t\t\t[1] List Users.\n";
-        cout << "\t\t\t\t\t[2] Add New User.\n";
-        cout << "\t\t\t\t\t[3] Delete User.\n";
-        cout << "\t\t\t\t\t[4] Update User.\n";
-        cout << "\t\t\t\t\t[5] Find User.\n";
-        cout << "\t\t\t\t\t[6] Main Menu.\n";
+        cout << Blue << "\t\t\t\t\t[1]<<" << RESET << " List Users.\n";
+        cout << Blue << "\t\t\t\t\t[2]<<" << RESET << " Add New User.\n";
+        cout << Blue << "\t\t\t\t\t[3]<<" << RESET << " Delete User.\n";
+        cout << Blue << "\t\t\t\t\t[4]<<" << RESET << " Update User.\n";
+        cout << Blue << "\t\t\t\t\t[5]<<" << RESET << " Find User.\n";
+        cout << Blue << "\t\t\t\t\t[6]<<" << RESET << " Main Menu.\n";
         cout << "\t\t\t\t=========================================\n";
     }
 
@@ -71,13 +68,15 @@ public:
     {
         if (!CheckAccessRights(ClsUser::enPermissions::pManageUsers))
         {
-            DisplayScreenTitle("\033[31mYou Don't Have Permission to Manage Users\033[0m");
+           BlockScreenDisplay("\033[31mYou Don't Have Permission to Manage Users\033[0m");
             return;
         }
-        DisplayScreenTitle("\tManage Users Screen");
         bool exit = false;
         while (!exit)
         {
+            system("cls");
+            DisplayScreenTitle("Manage Users Screen");
+
             _ManageUsersMenu();
             int Option = clsInputValidate::ReadIntNumberBetween("Choose what you want to do (1-6): ", 1, 6);
             _PerformManageUsersOption((enManageUsersOptions)Option);
@@ -86,8 +85,9 @@ public:
                 exit = false;
                 break;
             }
-            cout << "press any key to continue...";
-            system("pause");
+            cout << MAGENTA << "press any key to continue..." << RESET;
+            cin.ignore();
+            cin.get();
         }
     }
 };
